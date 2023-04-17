@@ -1,1 +1,16 @@
-{"endpoints":[{"url":"https://www.googleapis.com/oauth2/v3/certs","header":[]}]}
+{
+  "endpoints": [
+    {
+      "url": "https://www.bing.com",
+      "header": [
+        { "value": "application/json", "key": "Accept", "id": "Accept" },
+        {
+          "value": "Bearer Token",
+          "key": "Authorization",
+          "id": "Authorization"
+        }
+      ]
+    },
+    { "url": "https://www.googleapis.com/oauth2/v3/certs", "header": [] }
+  ]
+}

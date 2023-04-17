@@ -18,6 +18,8 @@ defmodule ApiMonitorWeb.DetailsLive.Index do
 
     kv = %{id: socket.assigns.key, key: socket.assigns.key, value: socket.assigns.value}
 
+
+
     IO.inspect kv
     {:noreply, assign(socket, data: [kv | socket.assigns.data])}
   end

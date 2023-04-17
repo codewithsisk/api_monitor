@@ -10,8 +10,6 @@ defmodule ApiMonitorWeb.MonitorLive.Index do
       Monitor.check_all()
     end
 
-
-
     {:ok, assign(socket, form: %{url: ""}, data: [])}
   end
 
@@ -21,15 +19,18 @@ defmodule ApiMonitorWeb.MonitorLive.Index do
   end
 
   def handle_event("save", %{"url" => url}, socket) do
-    IO.inspect("saving")
-    IO.inspect(url)
     spawn(fn -> Monitor.request(url) end)
     {:noreply, socket}
   end
 
   def handle_info({:message, {:ok, response}}, socket) do
-    IO.inspect("Message recieved")
     IO.inspect(response)
     {:noreply, assign(socket, data: [response | socket.assigns.data])}
   end
+
+  def handle_info({:message, {:error, error}}, socket) do
+    IO.inspect(error)
+    {:noreply, socket}
+  end
+
 end
