@@ -1,5 +1,4 @@
 defmodule ApiMonitor.HandlerSupervisor do
-
   use Supervisor
 
   def start_link(_) do
@@ -10,7 +9,7 @@ defmodule ApiMonitor.HandlerSupervisor do
     children = [
       ApiMonitor.Handler
     ]
+
     Supervisor.init(children, strategy: :one_for_one)
   end
-
 end

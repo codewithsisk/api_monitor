@@ -4,7 +4,17 @@
             "url": "https://www.googleapis.com/oauth2/v3/certs"
         },
         {
-            "url": "https://accounts.google.com/.well-known/openid-configuration"
+            "url": "https://accounts.google.com/.well-known/openid-configuration",
+            "headers": [
+                {
+                    "key": "auth",
+                    "value": "abc"
+                },
+                {
+                    "key": "xx-aa",
+                    "value": "qqq"
+                }
+            ]
         }
     ]
 }

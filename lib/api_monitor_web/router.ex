@@ -17,10 +17,11 @@ defmodule ApiMonitorWeb.Router do
   scope "/", ApiMonitorWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    #get "/", PageController, :home
 
-    live "/monitor", MonitorLive.Index, :index
-
+    live "/", MonitorLive.Index, :index
+    live "/save", DetailsLive.Index, :index
+    live "/endpoint", EndpointLive.Index, :index
   end
 
   # Other scopes may use custom stacks.

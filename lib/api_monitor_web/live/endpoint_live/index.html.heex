@@ -1,0 +1,10 @@
+<div>
+ <.link href="/save">add endpoint</.link>
+    <.table id="status" rows={@endpoints}>
+    <:col :let={data} label="Url"><%= data["url"] %></:col>
+    <:action :let={invoice}>
+    <.link phx-click={JS.push("delete", value: %{url: invoice["url"]})}
+      data-confirm="Are you sure?">delete</.link>
+  </:action>
+  </.table>
+</div>
