@@ -48,7 +48,8 @@ defmodule ApiMonitor.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:httpoison, "~> 2.1"},
-      {:poison, "~> 5.0"}
+      {:poison, "~> 5.0"},
+      {:sftp_client, "~> 1.4"}
     ]
   end
 

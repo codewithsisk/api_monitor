@@ -3,7 +3,6 @@ defmodule ApiMonitorWeb.MonitorLive.Index do
 
   alias ApiMonitor.Monitor
 
-
   def mount(_params, _session, socket) do
     if connected?(socket) do
       Monitor.subscribe()
@@ -32,5 +31,4 @@ defmodule ApiMonitorWeb.MonitorLive.Index do
     IO.inspect(error)
     {:noreply, socket}
   end
-
 end

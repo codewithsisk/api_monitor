@@ -1,0 +1,29 @@
+<div>
+  <.header>HTTP protocol</.header>
+  <.simple_form for={@form} id="monitor-form" phx-change="validate" phx-submit="save">
+    <.input
+      type="select"
+      field={@form[:protocol]}
+      options={[Http: "http", Ftp: "ftp"]}
+      value={@protocol}
+    />
+  </.simple_form>
+
+  <%= if @protocol == "http" do %>
+    <.live_component module={HttpComponent} id="hero" form={to_form(%{})} />
+  <% else %>
+    <p>FTp</p>
+  <% end %>
+
+  <%= if @response do %>
+    <div class="my-2">
+      <.success status={@response.status_code} url={@response.request_url} />
+    </div>
+  <% end %>
+
+  <%= if @error do %>
+    <div class="my-2">
+      <.error_alert />
+    </div>
+  <% end %>
+</div>

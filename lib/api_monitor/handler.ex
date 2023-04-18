@@ -33,7 +33,6 @@ defmodule ApiMonitor.Handler do
     GenServer.call(@name, :save)
   end
 
-
   # Server
   def handle_cast({:info, context, schema, plural}, state) do
     new_state =
@@ -42,12 +41,9 @@ defmodule ApiMonitor.Handler do
       |> Map.put("plural", plural)
 
     {:noreply, new_state}
-
   end
 
-
   def handle_cast({:create_field, name, data}, state) do
-
     endpoints = field(Map.get(state, name))
 
     endpoints = [data | endpoints]
@@ -70,17 +66,14 @@ defmodule ApiMonitor.Handler do
   end
 
   def handle_call({:delete, field_name}, _from, state) do
-
     new_state =
       state
       |> Map.get("endpoints")
       |> Enum.reject(fn %{"url" => url} -> url == field_name end)
 
-
     new_state = Map.put(state, "endpoints", new_state)
     {:reply, new_state, new_state}
   end
-
 
   def field(nil) do
     []
@@ -100,7 +93,6 @@ defmodule ApiMonitor.Handler do
   end
 
   def write(content) do
-
     path = Path.absname("lib/endpoints.json")
 
     with :ok <- File.write(path, content) do

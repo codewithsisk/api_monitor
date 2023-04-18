@@ -4,17 +4,16 @@ defmodule ApiMonitorWeb.EndpointLive.Index do
   alias ApiMonitor.Handler
 
   def mount(_param, _session, socket) do
-    endpoints = Handler.status
+    endpoints = Handler.status()
     endpoints = endpoints(Map.get(endpoints, "endpoints"))
     IO.inspect(endpoints)
-   {:ok, assign(socket, endpoints: endpoints)}
+    {:ok, assign(socket, endpoints: endpoints)}
   end
 
-  def handle_event("delete",  %{"url" => url}, socket) do
-
-    endpoints = Handler.delete_field url
+  def handle_event("delete", %{"url" => url}, socket) do
+    endpoints = Handler.delete_field(url)
     endpoints = endpoints(Map.get(endpoints, "endpoints"))
-    Handler.save
+    Handler.save()
     {:noreply, assign(socket, endpoints: endpoints)}
   end
 

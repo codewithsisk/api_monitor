@@ -1,0 +1,100 @@
+<div>
+  <.simple_form
+    for={@form}
+    id="monitor-form"
+    phx-change="validate"
+    phx-submit="save"
+    phx-target={@myself}
+  >
+    <.input
+      field={@form[:url]}
+      type="text"
+      label="url"
+      value={@url}
+      placeholder="url e.g. https://www.bing.com"
+    />
+    <p>Headers</p>
+    <div class="flex space-x-2 bg-red-3 items-end">
+      <div class="w-full">
+        <.input
+          field={@form[:header_key]}
+          type="text"
+          label="key"
+          class="w-full"
+          placeholder="e.g. Accept"
+        />
+      </div>
+
+      <div class="w-full">
+        <.input
+          field={@form[:header_value]}
+          type="text"
+          label="value"
+          class="w-full"
+          placeholder="e.g. application/json"
+        />
+      </div>
+
+      <.button
+        phx-click="header"
+        phx-target={@myself}
+        type="button"
+        class="rounded-full h-fit p-2 text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
+      >
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+        </svg>
+      </.button>
+    </div>
+
+    <.table id="status" rows={@headers}>
+      <:col :let={header} label="Key"><%= header.header_key %></:col>
+
+      <:col :let={header} label="Value"><%= header.header_value %></:col>
+    </.table>
+
+    <p>Params</p>
+    <div class="flex space-x-2 bg-red-3 items-end">
+      <div class="w-full">
+        <.input
+          field={@form[:param_key]}
+          type="text"
+          label="key"
+          class="w-full"
+          placeholder="e.g. word"
+        />
+      </div>
+
+      <div class="w-full">
+        <.input
+          field={@form[:param_value]}
+          type="text"
+          label="value"
+          class="w-full"
+          placeholder="e.g. run"
+        />
+      </div>
+
+      <.button
+        phx-click="param"
+        phx-target={@myself}
+        type="button"
+        class="rounded-full h-fit p-2 text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
+      >
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+        </svg>
+      </.button>
+    </div>
+
+    <.table id="status" rows={@params}>
+      <:col :let={param} label="Key"><%= param.param_key %></:col>
+
+      <:col :let={param} label="Value"><%= param.param_value %></:col>
+    </.table>
+
+    <:actions>
+      <.button phx-disable-with="Checking...">Check</.button>
+    </:actions>
+  </.simple_form>
+</div>
