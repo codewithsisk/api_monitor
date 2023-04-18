@@ -1,0 +1,43 @@
+<div>
+    <.simple_form
+    for={@form}
+    id="monitor-form"
+    phx-change="validate"
+    phx-submit="save"
+    phx-target={@myself}
+  >
+
+  <.input
+      field={@form[:host]}
+      type="text"
+      label="host"
+     
+      placeholder="host"
+    />
+
+    <.input
+      field={@form[:username]}
+      type="text"
+      label="username"
+      placeholder="username e.g. bob"
+    />
+
+    <.input
+      field={@form[:password]}
+      type="password"
+      label="password"
+     
+      placeholder="password"
+    />
+
+    <.input
+      field={@form[:port]}
+      type="number"
+      label="port"
+      placeholder="port"
+    />
+    <:actions>
+      <.button phx-disable-with="Checking...">Check</.button>
+    </:actions>
+  </.simple_form>
+</div>

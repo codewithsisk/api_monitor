@@ -1,6 +1,7 @@
 defmodule ApiMonitorWeb.SingleLive.Index do
   use ApiMonitorWeb, :live_view
   alias ApiMonitorWeb.HttpComponent.HttpComponent
+  alias ApiMonitorWeb.FtpComponent.FtpComponent
 
   import ApiMonitorWeb.Response
 
@@ -21,6 +22,7 @@ defmodule ApiMonitorWeb.SingleLive.Index do
   end
 
   def handle_info({:message, {:ok, response}}, socket) do
+    IO.inspect(response)
     {:noreply, assign(socket, response: response)}
   end
 

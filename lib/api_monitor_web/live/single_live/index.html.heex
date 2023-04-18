@@ -1,5 +1,11 @@
 <div>
-  <.header>HTTP protocol</.header>
+  <.header>
+  <%= if @protocol == "http" do %>
+  HTTP protocol
+  <% else %>
+  FTP protocol
+  <% end %>
+  </.header>
   <.simple_form for={@form} id="monitor-form" phx-change="validate" phx-submit="save">
     <.input
       type="select"
@@ -10,9 +16,11 @@
   </.simple_form>
 
   <%= if @protocol == "http" do %>
-    <.live_component module={HttpComponent} id="hero" form={to_form(%{})} />
-  <% else %>
-    <p>FTp</p>
+    <.live_component module={HttpComponent} id="http" form={to_form(%{})} />
+  <% end %>
+
+  <%= if @protocol == "ftp" do %>
+  <.live_component module={FtpComponent} id="ftp" form={to_form(%{})} />
   <% end %>
 
   <%= if @response do %>
