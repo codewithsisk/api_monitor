@@ -67,3 +67,12 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
+
+config :api_monitor, ApiMonitor.Repo,
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
+  database: "api_monitor_dev",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10

@@ -6,7 +6,6 @@ defmodule ApiMonitorWeb.MonitorLive.Index do
   def mount(_params, _session, socket) do
     if connected?(socket) do
       Monitor.subscribe()
-      Monitor.check_all()
     end
 
     {:ok, assign(socket, form: %{url: ""}, data: [])}
@@ -22,13 +21,24 @@ defmodule ApiMonitorWeb.MonitorLive.Index do
     {:noreply, socket}
   end
 
-  def handle_info({:message, {:ok, response}}, socket) do
+
+  def handle_info({:message, {:ok, response}, point}, socket) do
     IO.inspect(response)
-    {:noreply, assign(socket, data: [response | socket.assigns.data])}
+    info = %{info: point, status: response.status_code, time: DateTime.utc_now()}
+    data = append_sort(socket.assigns.data, info)
+    {:noreply, assign(socket, data: data)}
   end
 
-  def handle_info({:message, {:error, error}}, socket) do
+  def handle_info({:message, {:error, error}, point}, socket) do
     IO.inspect(error)
-    {:noreply, socket}
+    info = %{info: point, status: 500, time: DateTime.utc_now()}
+    data = append_sort(socket.assigns.data, info)
+    {:noreply, assign(socket, data: data)}
+  end
+
+  def append_sort(endpoints, point) do
+    new_list = Enum.reject(endpoints, fn e -> e.info.id == point.info.id end)
+    [point | new_list]
+    |> Enum.sort(&(&1.status >= &2.status))
   end
 end

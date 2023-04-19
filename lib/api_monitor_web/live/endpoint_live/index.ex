@@ -1,5 +1,6 @@
 defmodule ApiMonitorWeb.EndpointLive.Index do
   use ApiMonitorWeb, :live_view
+  alias ApiMonitor.MonitorDb
 
   alias ApiMonitor.Handler
 

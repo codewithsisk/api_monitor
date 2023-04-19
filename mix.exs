@@ -49,7 +49,10 @@ defmodule ApiMonitor.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:httpoison, "~> 2.1"},
       {:poison, "~> 5.0"},
-      {:sftp_client, "~> 1.4"}
+      {:sftp_client, "~> 1.4"},
+      {:phoenix_ecto, "~> 4.4"},
+      {:ecto_sql, "~> 3.6"},
+      {:postgrex, ">= 0.0.0"},
     ]
   end
 
@@ -62,6 +65,8 @@ defmodule ApiMonitor.MixProject do
   defp aliases do
     [
       setup: ["deps.get", "assets.setup", "assets.build"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["tailwind default", "esbuild default"],
       "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]

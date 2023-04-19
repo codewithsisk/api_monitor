@@ -1,6 +1,7 @@
 defmodule ApiMonitor.Monitor do
   alias ApiMonitor.Handler
   alias ApiMonitor.PubSub
+  alias ApiMonitor.MonitorDb
 
   def check_all do
     Handler.status()
@@ -8,21 +9,27 @@ defmodule ApiMonitor.Monitor do
     |> call_endpoints
   end
 
+  def all do
+    MonitorDb.list_endpoint
+    |> call_endpoints()
+
+  end
+
   def call_endpoints([]) do
   end
 
   def call_endpoints(endpoints) do
     endpoints
-    |> Enum.each(fn %{"url" => e, "header" => headers} -> spawn(fn -> request(e, headers) end) end)
+    |> Enum.each(fn p -> spawn(fn -> request(p) end) end)
   end
 
-  def request(url, headers, params \\ %{}) do
-    headers = header_key_value(headers)
-    params = param_map(params)
-    url = url <> params
-    IO.inspect(url)
-    res = HTTPoison.get(url, headers)
-    # Phoenix.PubSub.broadcast(PubSub, "hello", {:message, res})
+  def request(point) do
+    headers = header_key_value(point.headers)
+    params = param_map(point.params)
+    url = point.url <> params
+
+    response = HTTPoison.get(url, headers)
+    Phoenix.PubSub.broadcast(PubSub, "hello", {:message, response, point})
   end
 
   def response(response) do
@@ -54,4 +61,6 @@ defmodule ApiMonitor.Monitor do
   def subscribe do
     Phoenix.PubSub.subscribe(PubSub, "hello")
   end
+
+
 end

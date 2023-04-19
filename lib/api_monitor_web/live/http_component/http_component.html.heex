@@ -6,6 +6,13 @@
     phx-submit="save"
     phx-target={@myself}
   >
+  <.input
+      field={@form[:name]}
+      type="text"
+      label="name"
+      value={@name}
+      placeholder="name e.g Bing"
+    />
     <.input
       field={@form[:url]}
       type="text"
@@ -94,7 +101,7 @@
     </.table>
 
     <:actions>
-      <.button phx-disable-with="Checking...">Check</.button>
+      <.button phx-disable-with="Checking...">Add</.button>
     </:actions>
   </.simple_form>
 </div>

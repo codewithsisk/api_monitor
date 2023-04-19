@@ -1,6 +1,7 @@
 defmodule ApiMonitorWeb.HttpComponent.HttpComponent do
   use ApiMonitorWeb, :live_component
   alias ApiMonitor.Monitor
+  alias ApiMonitor.MonitorDb
 
   def update(assigns, socket) do
     socket = assign(socket, assigns)
@@ -12,6 +13,7 @@ defmodule ApiMonitorWeb.HttpComponent.HttpComponent do
        header_value: nil,
        headers: [],
        url: "",
+       name: nil,
        params: [],
        param_key: nil,
        param_value: nil
@@ -24,6 +26,7 @@ defmodule ApiMonitorWeb.HttpComponent.HttpComponent do
           "header_key" => key,
           "header_value" => value,
           "url" => url,
+          "name" => name,
           "param_key" => p_key,
           "param_value" => p_value
         },
@@ -36,6 +39,7 @@ defmodule ApiMonitorWeb.HttpComponent.HttpComponent do
        header_key: key,
        header_value: value,
        url: url,
+       name: name,
        param_key: p_key,
        param_value: p_value
      )}
@@ -62,12 +66,32 @@ defmodule ApiMonitorWeb.HttpComponent.HttpComponent do
 
   def handle_event("save", _, socket) do
     url = socket.assigns.url
-    headers = socket.assigns.headers
-    params = socket.assigns.params
-    data = %{"url" => url, "header" => headers, "params" => params}
-    response = Monitor.request(url, headers, params)
-    notify_parent({:message, response})
-    {:noreply, socket}
+    headers = convert_list(socket.assigns.headers)
+    params = convert_list(socket.assigns.params)
+    name = socket.assigns.name
+    data = %{"url" => url, "name" => name, "headers" => headers, "params" => params}
+
+    res = MonitorDb.create_endpoints(data)
+    IO.inspect(res)
+    maybe_redirect(socket, res)
+    # response = Monitor.request(url, headers, params)
+    # notify_parent({:message, response})
+
+  end
+
+  def maybe_redirect(socket, {:ok, _endpoint}) do
+    {:noreply, push_navigate(socket, to: "/")}
+  end
+
+  def maybe_redirect(socket, _any) do
+    {:noreply, assign(socket, error: "Error")}
+  end
+
+  def convert_list(list) do
+    Enum.map(list, fn item -> to_string_key(item) end)
+  end
+  def to_string_key(map) do
+    Map.new(map, fn {k, v} -> {to_string(k), v} end)
   end
 
   defp notify_parent(msg), do: send(self(), msg)

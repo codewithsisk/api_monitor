@@ -18,7 +18,9 @@ defmodule ApiMonitor.Application do
       ApiMonitorWeb.Endpoint,
       # Start a worker by calling: ApiMonitor.Worker.start_link(arg)
       # {ApiMonitor.Worker, arg}
-      ApiMonitor.HandlerSupervisor
+      ApiMonitor.HandlerSupervisor,
+
+      ApiMonitor.Repo
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

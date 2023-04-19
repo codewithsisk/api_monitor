@@ -7,6 +7,8 @@
 # General application configuration
 import Config
 
+config :api_monitor,
+  ecto_repos: [ApiMonitor.Repo]
 # Configures the endpoint
 config :api_monitor, ApiMonitorWeb.Endpoint,
   url: [host: "localhost"],

@@ -1,15 +1,16 @@
 <div>
   <.link
-    href="/save"
+    href="/endpoint"
     class="rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3 text-sm font-semibold leading-6 text-white active:text-white/80"
   >
-    add endpoint
+    add
   </.link>
-  <.link href="/endpoint">Manage endpoints</.link>
+ 
 
   <.table id="status" rows={@data}>
-    <:col :let={data} label="Url"><%= data.request_url %></:col>
-
-    <:col :let={data} label="Status code"><%= data.status_code %></:col>
+  <:col :let={data} label="Name"><%= data.info.name %></:col>
+    <:col :let={data} label="Url"><%= data.info.url %></:col>
+    <:col :let={data} label="Time"><%= data.time %></:col>
+    <:col :let={data} label="Status code"><%= data.status %></:col>
   </.table>
 </div>
