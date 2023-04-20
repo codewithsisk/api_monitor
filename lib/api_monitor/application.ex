@@ -19,7 +19,6 @@ defmodule ApiMonitor.Application do
       # Start a worker by calling: ApiMonitor.Worker.start_link(arg)
       # {ApiMonitor.Worker, arg}
       ApiMonitor.HandlerSupervisor,
-
       ApiMonitor.Repo
     ]
 

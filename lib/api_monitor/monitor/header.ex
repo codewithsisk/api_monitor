@@ -11,5 +11,4 @@ defmodule ApiMonitor.Monitor.Header do
     endpoint
     |> cast(params, [:header_key, :header_value])
   end
-  
 end

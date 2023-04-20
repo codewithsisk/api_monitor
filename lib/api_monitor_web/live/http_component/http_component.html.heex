@@ -6,7 +6,7 @@
     phx-submit="save"
     phx-target={@myself}
   >
-  <.input
+    <.input
       field={@form[:name]}
       type="text"
       label="name"
@@ -100,8 +100,31 @@
       <:col :let={param} label="Value"><%= param.param_value %></:col>
     </.table>
 
+    <.input
+      type="select"
+      field={@form[:schedule]}
+      options={["5 Minutes": "T5M", "15 munites": "T15M", "30 munites": "T30M", "1 hour": "T1H"]}
+      value={@schedule}
+      label="Interval"
+    />
+
     <:actions>
-      <.button phx-disable-with="Checking...">Add</.button>
+      <.button phx-target={@myself} phx-click="check" phx-disable-with="checking...">
+        Check
+      </.button>
+      <.button phx-disable-with="saving...">Save</.button>
     </:actions>
   </.simple_form>
+
+  <%= if @checker_response do %>
+    <div class="my-2">
+      <.success status={@checker_response.status_code} url={@checker_response.request_url} />
+    </div>
+  <% end %>
+
+  <%= if @checker_error do %>
+    <div class="my-2">
+      <.error_alert />
+    </div>
+  <% end %>
 </div>

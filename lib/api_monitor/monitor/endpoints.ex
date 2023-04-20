@@ -3,18 +3,19 @@ defmodule ApiMonitor.Monitor.Endpoints do
   import Ecto.Changeset
 
   schema "endpoint" do
-    field :name, :string
-    field :url, :string
-    embeds_many :headers, ApiMonitor.Monitor.Header, on_replace: :delete
-    embeds_many :params, ApiMonitor.Monitor.Param , on_replace: :delete
+    field(:name, :string)
+    field(:url, :string)
+    field(:schedule, Ecto.Enum, values: [:T5M, :T15M, :T30M, :T1H])
+    embeds_many(:headers, ApiMonitor.Monitor.Header, on_replace: :delete)
+    embeds_many(:params, ApiMonitor.Monitor.Param, on_replace: :delete)
     timestamps()
   end
 
   @doc false
   def changeset(endpoints, attrs) do
     endpoints
-    |> cast(attrs, [:url, :name])
-    |> validate_required([:url, :name])
+    |> cast(attrs, [:url, :name, :schedule])
+    |> validate_required([:url, :name, :schedule])
     |> cast_embed(:headers)
     |> cast_embed(:params)
   end

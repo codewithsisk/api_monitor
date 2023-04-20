@@ -2,6 +2,7 @@ defmodule ApiMonitorWeb.HttpComponent.HttpComponent do
   use ApiMonitorWeb, :live_component
   alias ApiMonitor.Monitor
   alias ApiMonitor.MonitorDb
+  import ApiMonitorWeb.Response
 
   def update(assigns, socket) do
     socket = assign(socket, assigns)
@@ -16,7 +17,10 @@ defmodule ApiMonitorWeb.HttpComponent.HttpComponent do
        name: nil,
        params: [],
        param_key: nil,
-       param_value: nil
+       param_value: nil,
+       checker_error: nil,
+       checker_response: nil,
+       schedule: "T5M"
      )}
   end
 
@@ -28,12 +32,11 @@ defmodule ApiMonitorWeb.HttpComponent.HttpComponent do
           "url" => url,
           "name" => name,
           "param_key" => p_key,
-          "param_value" => p_value
+          "param_value" => p_value,
+          "schedule" => schedule
         },
         socket
       ) do
-    IO.inspect("validating HTTP")
-
     {:noreply,
      assign(socket,
        header_key: key,
@@ -41,7 +44,10 @@ defmodule ApiMonitorWeb.HttpComponent.HttpComponent do
        url: url,
        name: name,
        param_key: p_key,
-       param_value: p_value
+       param_value: p_value,
+       schedule: schedule,
+       checker_error: nil,
+       checker_response: nil
      )}
   end
 
@@ -69,14 +75,38 @@ defmodule ApiMonitorWeb.HttpComponent.HttpComponent do
     headers = convert_list(socket.assigns.headers)
     params = convert_list(socket.assigns.params)
     name = socket.assigns.name
-    data = %{"url" => url, "name" => name, "headers" => headers, "params" => params}
+    interval = socket.assigns.schedule
+
+    data = %{
+      "url" => url,
+      "name" => name,
+      "headers" => headers,
+      "params" => params,
+      "schedule" => interval
+    }
 
     res = MonitorDb.create_endpoints(data)
     IO.inspect(res)
     maybe_redirect(socket, res)
     # response = Monitor.request(url, headers, params)
     # notify_parent({:message, response})
+  end
 
+  def handle_event("check", _, socket) do
+    url = socket.assigns.url
+    headers = socket.assigns.headers
+    params = socket.assigns.params
+    response = Monitor.validate(url, headers, params)
+    handle_checker(response, socket)
+  end
+
+  def handle_checker({:ok, response}, socket) do
+    IO.inspect(response)
+    {:noreply, assign(socket, checker_response: response)}
+  end
+
+  def handle_checker({:error, error}, socket) do
+    {:noreply, assign(socket, checker_error: error)}
   end
 
   def maybe_redirect(socket, {:ok, _endpoint}) do
@@ -90,6 +120,7 @@ defmodule ApiMonitorWeb.HttpComponent.HttpComponent do
   def convert_list(list) do
     Enum.map(list, fn item -> to_string_key(item) end)
   end
+
   def to_string_key(map) do
     Map.new(map, fn {k, v} -> {to_string(k), v} end)
   end

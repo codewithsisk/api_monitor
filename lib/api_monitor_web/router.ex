@@ -20,8 +20,8 @@ defmodule ApiMonitorWeb.Router do
     # get "/", PageController, :home
 
     live "/", MonitorLive.Index, :index
-    #live "/save", DetailsLive.Index, :index
-   # live "/endpoint", EndpointLive.Index, :index
+    # live "/save", DetailsLive.Index, :index
+    live "/manage", EndpointLive.Index, :index
     live "/endpoint", SingleLive.Index, :index
   end
 

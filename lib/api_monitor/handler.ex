@@ -11,22 +11,46 @@ defmodule ApiMonitor.Handler do
   end
 
   def init(state) do
-
-    schedule_work()
+    # init_work()
+    schedule_5_m_work()
+    schedule_15_m_work()
     {:ok, state}
   end
 
-  def handle_info(:work, state) do
-    IO.inspect("ticking..........")
-    state = MonitorDb.list_endpoint
+  def handle_info(:work_5m, _state) do
+    IO.inspect("5 minutes schedule..........")
+    state = MonitorDb.get_endpoint_by_schedule(:T5M)
     Monitor.call_endpoints(state)
-    schedule_work()
+    schedule_5_m_work()
     {:noreply, state}
   end
 
-  def schedule_work() do
-    Process.send_after(self(), :work, :timer.seconds(15))
+  def handle_info(:work_15m, _state) do
+    IO.inspect("15 minutes schedule..........")
+    state = MonitorDb.get_endpoint_by_schedule(:T15M)
+    Monitor.call_endpoints(state)
+    schedule_15_m_work()
+    {:noreply, state}
   end
 
+  # def handle_info(:init, _state) do
+  #   IO.inspect("Initial schedule..........")
+  #   state = MonitorDb.list_endpoint()
+  #   Monitor.call_endpoints(state)
+  #   {:noreply, state}
+  # end
 
+  def schedule_5_m_work() do
+    #MUNITES REDUCED FOR TESTING
+    Process.send_after(self(), :work_5m, :timer.minutes(1))
+  end
+
+  def schedule_15_m_work() do
+    #MUNITES REDUCED FOR TESTING
+    Process.send_after(self(), :work_15m, :timer.minutes(2))
+  end
+
+  # def init_work do
+  #   Process.send_after(self(), :init, :timer.seconds(5))
+  # end
 end

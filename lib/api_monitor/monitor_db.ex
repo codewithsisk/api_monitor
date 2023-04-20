@@ -1,7 +1,7 @@
 defmodule ApiMonitor.MonitorDb do
-    alias ApiMonitor.Monitor.Endpoints
-    import Ecto.Query, warn: false
-    alias ApiMonitor.Repo
+  alias ApiMonitor.Monitor.Endpoints
+  import Ecto.Query, warn: false
+  alias ApiMonitor.Repo
 
   @doc """
   Returns the list of endpoint.
@@ -32,6 +32,8 @@ defmodule ApiMonitor.MonitorDb do
   """
   def get_endpoints!(id), do: Repo.get!(Endpoints, id)
 
+  def get_endpoints(id), do: Repo.get(Endpoints, id)
+
   @doc """
   Creates a endpoints.
 
@@ -47,6 +49,7 @@ defmodule ApiMonitor.MonitorDb do
   def create_endpoints(attrs \\ %{}) do
     IO.inspect("creating.....")
     IO.inspect(attrs)
+
     %Endpoints{}
     |> Endpoints.changeset(attrs)
     |> Repo.insert()
@@ -97,5 +100,9 @@ defmodule ApiMonitor.MonitorDb do
   """
   def change_endpoints(%Endpoints{} = endpoints, attrs \\ %{}) do
     Endpoints.changeset(endpoints, attrs)
+  end
+
+  def get_endpoint_by_schedule(time) do
+    Repo.all(from(e in Endpoints, where: e.schedule == ^time))
   end
 end

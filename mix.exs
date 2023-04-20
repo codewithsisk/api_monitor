@@ -52,7 +52,7 @@ defmodule ApiMonitor.MixProject do
       {:sftp_client, "~> 1.4"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
-      {:postgrex, ">= 0.0.0"},
+      {:postgrex, ">= 0.0.0"}
     ]
   end
 

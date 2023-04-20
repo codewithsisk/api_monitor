@@ -2,20 +2,23 @@ defmodule ApiMonitorWeb.EndpointLive.Index do
   use ApiMonitorWeb, :live_view
   alias ApiMonitor.MonitorDb
 
-  alias ApiMonitor.Handler
-
   def mount(_param, _session, socket) do
-    endpoints = Handler.status()
-    endpoints = endpoints(Map.get(endpoints, "endpoints"))
+    endpoints = MonitorDb.list_endpoint()
     IO.inspect(endpoints)
     {:ok, assign(socket, endpoints: endpoints)}
   end
 
-  def handle_event("delete", %{"url" => url}, socket) do
-    endpoints = Handler.delete_field(url)
-    endpoints = endpoints(Map.get(endpoints, "endpoints"))
-    Handler.save()
-    {:noreply, assign(socket, endpoints: endpoints)}
+  def handle_event("delete", %{"id" => id}, socket) do
+    point = MonitorDb.get_endpoints(id)
+    handle_delete(MonitorDb.delete_endpoints(point), socket)
+  end
+
+  def handle_delete({:ok, _}, socket) do
+    {:noreply, push_navigate(socket, to: "/manage")}
+  end
+
+  def handle_delete(_, socket) do
+    {:noreply, socket}
   end
 
   def endpoints(nil), do: []

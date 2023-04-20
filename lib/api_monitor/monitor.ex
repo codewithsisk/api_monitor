@@ -1,18 +1,10 @@
 defmodule ApiMonitor.Monitor do
-  alias ApiMonitor.Handler
   alias ApiMonitor.PubSub
   alias ApiMonitor.MonitorDb
 
-  def check_all do
-    Handler.status()
-    |> Map.get("endpoints")
-    |> call_endpoints
-  end
-
   def all do
-    MonitorDb.list_endpoint
+    MonitorDb.list_endpoint()
     |> call_endpoints()
-
   end
 
   def call_endpoints([]) do
@@ -30,6 +22,14 @@ defmodule ApiMonitor.Monitor do
 
     response = HTTPoison.get(url, headers)
     Phoenix.PubSub.broadcast(PubSub, "hello", {:message, response, point})
+  end
+
+  def validate(url, headers, params) do
+    headers = header_key_value(headers)
+    params = param_map(params)
+    url = url <> params
+
+    HTTPoison.get(url, headers)
   end
 
   def response(response) do
@@ -61,6 +61,4 @@ defmodule ApiMonitor.Monitor do
   def subscribe do
     Phoenix.PubSub.subscribe(PubSub, "hello")
   end
-
-
 end

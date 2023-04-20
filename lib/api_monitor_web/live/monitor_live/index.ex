@@ -2,10 +2,12 @@ defmodule ApiMonitorWeb.MonitorLive.Index do
   use ApiMonitorWeb, :live_view
 
   alias ApiMonitor.Monitor
+  import ApiMonitorWeb.CustomTable
 
   def mount(_params, _session, socket) do
     if connected?(socket) do
       Monitor.subscribe()
+      Monitor.all()
     end
 
     {:ok, assign(socket, form: %{url: ""}, data: [])}
@@ -20,7 +22,6 @@ defmodule ApiMonitorWeb.MonitorLive.Index do
     spawn(fn -> Monitor.request(url) end)
     {:noreply, socket}
   end
-
 
   def handle_info({:message, {:ok, response}, point}, socket) do
     IO.inspect(response)
@@ -38,6 +39,7 @@ defmodule ApiMonitorWeb.MonitorLive.Index do
 
   def append_sort(endpoints, point) do
     new_list = Enum.reject(endpoints, fn e -> e.info.id == point.info.id end)
+
     [point | new_list]
     |> Enum.sort(&(&1.status >= &2.status))
   end
