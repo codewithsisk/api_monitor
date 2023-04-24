@@ -41,12 +41,12 @@ defmodule ApiMonitor.Handler do
   # end
 
   def schedule_5_m_work() do
-    #MUNITES REDUCED FOR TESTING
+    # MUNITES REDUCED FOR TESTING
     Process.send_after(self(), :work_5m, :timer.minutes(1))
   end
 
   def schedule_15_m_work() do
-    #MUNITES REDUCED FOR TESTING
+    # MUNITES REDUCED FOR TESTING
     Process.send_after(self(), :work_15m, :timer.minutes(2))
   end
 

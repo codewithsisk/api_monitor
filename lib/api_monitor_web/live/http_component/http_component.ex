@@ -51,23 +51,50 @@ defmodule ApiMonitorWeb.HttpComponent.HttpComponent do
      )}
   end
 
-  def handle_event("header", _, socket) do
-    header = %{
-      id: socket.assigns.header_key,
-      header_key: socket.assigns.header_key,
-      header_value: socket.assigns.header_value
-    }
+  def handle_event("add-header", _, socket) do
+    case Enum.find(socket.assigns.headers, fn h -> h.id == socket.assigns.header_key end) do
+      nil ->
+        header = %{
+          id: socket.assigns.header_key,
+          header_key: socket.assigns.header_key,
+          header_value: socket.assigns.header_value
+        }
 
-    IO.inspect(header)
-    {:noreply, assign(socket, headers: [header | socket.assigns.headers])}
+        {:noreply, assign(socket, headers: [header | socket.assigns.headers])}
+
+      item ->
+        headers =
+          Enum.map(socket.assigns.headers, fn h ->
+            if h.id == item.id,
+              do: Map.put(h, :header_value, socket.assigns.header_value),
+              else: h
+          end)
+
+        IO.inspect(headers)
+        {:noreply, assign(socket, headers: headers)}
+    end
   end
 
-  def handle_event("param", _, socket) do
-    IO.inspect("headers")
-    param = %{param_key: socket.assigns.param_key, param_value: socket.assigns.param_value}
+  def handle_event("add-param", _, socket) do
+    case Enum.find(socket.assigns.params, fn p -> p.id == socket.assigns.param_key end) do
+      nil ->
+        param = %{
+          id: socket.assigns.param_key,
+          param_key: socket.assigns.param_key,
+          param_value: socket.assigns.param_value
+        }
 
-    IO.inspect(param)
-    {:noreply, assign(socket, params: [param | socket.assigns.params])}
+        {:noreply, assign(socket, params: [param | socket.assigns.params])}
+
+      item ->
+        params =
+          Enum.map(socket.assigns.params, fn p ->
+            if p.id == item.id, do: Map.put(p, :param_value, socket.assigns.param_value), else: p
+          end)
+
+        IO.inspect(params)
+        {:noreply, assign(socket, params: params)}
+    end
   end
 
   def handle_event("save", _, socket) do
@@ -100,6 +127,17 @@ defmodule ApiMonitorWeb.HttpComponent.HttpComponent do
     handle_checker(response, socket)
   end
 
+  def handle_event("delete-header", %{"header_id" => id}, socket) do
+    headers = handle_delete(socket.assigns.headers, id)
+    {:noreply, assign(socket, headers: headers)}
+  end
+
+  def handle_event("delete-param", %{"param_id" => id}, socket) do
+    params = handle_delete(socket.assigns.params, id)
+
+    {:noreply, assign(socket, params: params)}
+  end
+
   def handle_checker({:ok, response}, socket) do
     IO.inspect(response)
     {:noreply, assign(socket, checker_response: response)}
@@ -115,6 +153,10 @@ defmodule ApiMonitorWeb.HttpComponent.HttpComponent do
 
   def maybe_redirect(socket, _any) do
     {:noreply, assign(socket, error: "Error")}
+  end
+
+  def handle_delete(list, id) do
+    Enum.reject(list, fn h -> h.id == id end)
   end
 
   def convert_list(list) do

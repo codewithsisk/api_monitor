@@ -43,7 +43,7 @@
       </div>
 
       <.button
-        phx-click="header"
+        phx-click="add-header"
         phx-target={@myself}
         type="button"
         class="rounded-full h-fit p-2 text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
@@ -58,6 +58,14 @@
       <:col :let={header} label="Key"><%= header.header_key %></:col>
 
       <:col :let={header} label="Value"><%= header.header_value %></:col>
+      <:action :let={header}>
+        <.link
+          phx-click={JS.push("delete-header", value: %{header_id: header.id})}
+          phx-target={@myself}
+        >
+          Delete
+        </.link>
+      </:action>
     </.table>
 
     <p>Params</p>
@@ -83,7 +91,7 @@
       </div>
 
       <.button
-        phx-click="param"
+        phx-click="add-param"
         phx-target={@myself}
         type="button"
         class="rounded-full h-fit p-2 text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
@@ -98,6 +106,14 @@
       <:col :let={param} label="Key"><%= param.param_key %></:col>
 
       <:col :let={param} label="Value"><%= param.param_value %></:col>
+      <:action :let={param}>
+        <.link
+          phx-click={JS.push("delete-param", value: %{param_id: param.id})}
+          phx-target={@myself}
+        >
+          Delete
+        </.link>
+      </:action>
     </.table>
 
     <.input
