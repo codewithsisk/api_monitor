@@ -7,18 +7,18 @@
 # General application configuration
 import Config
 
-config :api_monitor,
-  ecto_repos: [ApiMonitor.Repo]
+config :binary_monitor,
+  ecto_repos: [BinaryMonitor.Repo]
 
 # Configures the endpoint
-config :api_monitor, ApiMonitorWeb.Endpoint,
+config :binary_monitor, BinaryMonitorWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [
-    formats: [html: ApiMonitorWeb.ErrorHTML, json: ApiMonitorWeb.ErrorJSON],
+    formats: [html: BinaryMonitorWeb.ErrorHTML, json: BinaryMonitorWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: ApiMonitor.PubSub,
-  live_view: [signing_salt: "7RHB6HrD"]
+  pubsub_server: BinaryMonitor.PubSub,
+  live_view: [signing_salt: "pQu4FOQf"]
 
 # Configures the mailer
 #
@@ -27,7 +27,7 @@ config :api_monitor, ApiMonitorWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :api_monitor, ApiMonitor.Mailer, adapter: Swoosh.Adapters.Local
+config :binary_monitor, BinaryMonitor.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,

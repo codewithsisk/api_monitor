@@ -1,22 +1,27 @@
 import Config
 
-config :api, ApiMonitor.Repo,
+# Configure your database
+#
+# The MIX_TEST_PARTITION environment variable can be used
+# to provide built-in test partitioning in CI environment.
+# Run `mix help test` for more information.
+config :binary_monitor, BinaryMonitor.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
-  database: "api_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "binary_monitor_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :api_monitor, ApiMonitorWeb.Endpoint,
+config :binary_monitor, BinaryMonitorWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "CE4VA0ngiOITe7th7iSvfVNQQV8Eq2UIMxwhVtpkTVlKoFyMA/XHjSDabcJKqpQT",
+  secret_key_base: "VkCqB7nafL0R06IGwW/HvX1L0QQDK+NyUwj6OLa0f2ZD5DUO/ZmvgtEPfZ6GYDoz",
   server: false
 
 # In test we don't send emails.
-config :api_monitor, ApiMonitor.Mailer, adapter: Swoosh.Adapters.Test
+config :binary_monitor, BinaryMonitor.Mailer, adapter: Swoosh.Adapters.Test
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false

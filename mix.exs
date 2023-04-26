@@ -1,9 +1,9 @@
-defmodule ApiMonitor.MixProject do
+defmodule BinaryMonitor.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :api_monitor,
+      app: :binary_monitor,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,8 +18,8 @@ defmodule ApiMonitor.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {ApiMonitor.Application, []},
-      extra_applications: [:logger, :runtime_tools, :httpoison]
+      mod: {BinaryMonitor.Application, []},
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -33,6 +33,9 @@ defmodule ApiMonitor.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.7.2"},
+      {:phoenix_ecto, "~> 4.4"},
+      {:ecto_sql, "~> 3.6"},
+      {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.3"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.18.16"},
@@ -49,10 +52,6 @@ defmodule ApiMonitor.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:httpoison, "~> 2.1"},
       {:poison, "~> 5.0"},
-      {:sftp_client, "~> 1.4"},
-      {:phoenix_ecto, "~> 4.4"},
-      {:ecto_sql, "~> 3.6"},
-      {:postgrex, ">= 0.0.0"}
     ]
   end
 
@@ -64,9 +63,10 @@ defmodule ApiMonitor.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "assets.setup", "assets.build"],
+      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["tailwind default", "esbuild default"],
       "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]

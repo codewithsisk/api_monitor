@@ -1,19 +1,29 @@
 import Config
 
+# Configure your database
+config :binary_monitor, BinaryMonitor.Repo,
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
+  database: "binary_monitor_dev",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with esbuild to bundle .js and .css sources.
-config :api_monitor, ApiMonitorWeb.Endpoint,
+config :binary_monitor, BinaryMonitorWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "V1BZeqkXblqgh9VMo+5WTz3Ra7y6toqUS0WgG28C1f94qJy6KXf9S/aNClfEiiVU",
+  secret_key_base: "WOddREaEPBojTJwl0YjgD8gTt/hdo7qX05fnwC8KrORd9twYyA0ed5Bb9C44/9a5",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
@@ -43,17 +53,17 @@ config :api_monitor, ApiMonitorWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :api_monitor, ApiMonitorWeb.Endpoint,
+config :binary_monitor, BinaryMonitorWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/api_monitor_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/binary_monitor_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :api_monitor, dev_routes: true
+config :binary_monitor, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
@@ -67,12 +77,3 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
-
-config :api_monitor, ApiMonitor.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "api_monitor_dev",
-  stacktrace: true,
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
