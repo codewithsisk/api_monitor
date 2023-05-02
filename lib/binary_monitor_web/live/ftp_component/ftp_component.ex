@@ -1,18 +1,25 @@
 defmodule BinaryMonitorWeb.FtpComponent.FtpComponent do
   use BinaryMonitorWeb, :live_component
+  alias BinaryMonitor.FtpClient
+  import BinaryMonitorWeb.Response
 
   def update(assigns, socket) do
     socket = assign(socket, assigns)
 
     {:ok,
      assign(socket,
-       host: nil
+       host: "",
+       error: nil,
+       response: nil,
+       username: "",
+       password: "",
+       port: ""
      )}
   end
 
-  def handle_event("validate", _, socket) do
-    IO.inspect("validate")
-    {:noreply, socket}
+  def handle_event("validate", %{"host" => host, "username" => username, "password" => password, "port" => port}, socket) do
+
+     {:noreply, assign(socket, error: nil, response: nil, username: username, password: password, port: port, host: host)}
   end
 
   def handle_event(
@@ -20,11 +27,24 @@ defmodule BinaryMonitorWeb.FtpComponent.FtpComponent do
         %{"host" => host, "username" => username, "password" => password, "port" => port},
         socket
       ) do
-    IO.inspect(host)
-    IO.inspect(username)
-    IO.inspect(password)
-    IO.inspect(port)
-    # TODO c
-    {:noreply, socket}
+
+    client = %FtpClient{username: username, password: password, host: host, port: port}
+    handle_client_response(FtpClient.check(client), socket)
+
   end
+
+  def handle_client_response({:ok, message}, socket) do
+    {:noreply, assign(socket, response: message)}
+  end
+
+  def handle_client_response({:error, message}, socket) do
+
+    {:noreply, assign(socket, error: message)}
+  end
+
+  def handle_client_response(_, socket) do
+
+    {:noreply, assign(socket, error: "Unkown error")}
+  end
+
 end

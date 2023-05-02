@@ -6,15 +6,27 @@
     phx-submit="save"
     phx-target={@myself}
   >
-    <.input field={@form[:host]} type="text" label="host" placeholder="host" />
+    <.input field={@form[:host]} value={@host} type="text" label="host" placeholder="host e.g. test.rebex.net" />
 
-    <.input field={@form[:username]} type="text" label="username" placeholder="username e.g. bob" />
+    <.input field={@form[:username]} value={@username} type="text" label="username" placeholder="username e.g. demo" />
 
-    <.input field={@form[:password]} type="password" label="password" placeholder="password" />
+    <.input field={@form[:password]} value={@password} type="password" label="password" placeholder="password" />
 
-    <.input field={@form[:port]} type="number" label="port" placeholder="port" />
+    <.input field={@form[:port]} value={@port} type="number" label="port (optional)" placeholder="default 21" />
     <:actions>
       <.button phx-disable-with="Checking...">Check</.button>
     </:actions>
   </.simple_form>
+
+  <%= if @response do %>
+    <div class="my-2">
+      <.success status={"ok"} url={@response} />
+    </div>
+  <% end %>
+
+  <%= if @error do %>
+    <div class="my-2">
+      <.error_alert message={@error} />
+    </div>
+  <% end %>
 </div>
