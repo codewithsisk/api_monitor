@@ -115,6 +115,7 @@ defmodule BinaryMonitorWeb.HttpComponent.HttpComponent do
     res = MonitorDb.create_endpoints(data)
     IO.inspect(res)
     maybe_redirect(socket, res)
+    #comment
     # response = Monitor.request(url, headers, params)
     # notify_parent({:message, response})
   end
