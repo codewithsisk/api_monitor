@@ -1,4 +1,4 @@
-# BinaryMonitor
+# EndpointMonitor
 
 To start the server:
 
